@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "convenientcontainers",
+  "version": "${version}",
+  "name": "ConvenientContainers",
+  "description": "Server-side only mod to quickly access containers",
+  "authors": [
+    "Qther"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Vonr/convenientcontainers"
+  },
+  "license": "MIT",
+  "icon": "assets/convenientcontainers/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.qther.convenientcontainers.fabric.ConvenientContainersFabric"
+    ]
+  },
+  "mixins": [
+    "convenientcontainers.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.5",
+    "minecraft": "~1.21",
+    "java": ">=21"
+  }
+}

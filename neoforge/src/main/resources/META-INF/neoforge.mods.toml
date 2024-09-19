@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "convenientcontainers"
+version = "${version}"
+displayName = "ConvenientContainers"
+authors = "Qther"
+description = '''
+Server-side only mod to quickly access containers
+'''
+logoFile = "icon.png"
+
+[[dependencies.convenientcontainers]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
+ordering = "NONE"
+side = "SERVER"
+
+[[dependencies.convenientcontainers]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[mixins]]
+config = "convenientcontainers.mixins.json"
