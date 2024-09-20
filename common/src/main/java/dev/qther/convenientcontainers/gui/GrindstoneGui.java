@@ -9,15 +9,15 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.CraftingMenu;
+import net.minecraft.world.inventory.GrindstoneMenu;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class CraftingTableGui extends ServersideGui {
-    public CraftingTableGui(@NotNull ServerPlayer player) {
+public class GrindstoneGui extends ServersideGui {
+    public GrindstoneGui(@NotNull ServerPlayer player) {
         super(player);
     }
 
@@ -25,12 +25,12 @@ public class CraftingTableGui extends ServersideGui {
         var stack = player.getMainHandItem();
         assert !stack.isEmpty();
 
-        player.openMenu(new SimpleMenuProvider(Menu::new, Component.translatable("block.minecraft.crafting_table")));
+        player.openMenu(new SimpleMenuProvider(Menu::new, Component.translatable("block.minecraft.grindstone")));
         ConvenientContainers.FROZEN_STACKS.add(stack);
-        player.awardStat(Stats.INTERACT_WITH_CRAFTING_TABLE);
+        player.awardStat(Stats.INTERACT_WITH_GRINDSTONE);
     }
 
-    public static class Menu extends CraftingMenu {
+    public static class Menu extends GrindstoneMenu {
         public Menu(int i, Inventory inventory, Player player) {
             super(i, inventory, new ContainerLevelAccess() {
                 @Override

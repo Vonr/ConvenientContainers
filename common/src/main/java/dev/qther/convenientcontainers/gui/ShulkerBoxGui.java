@@ -4,6 +4,8 @@ import dev.qther.convenientcontainers.ConvenientContainers;
 import dev.qther.convenientcontainers.mixin.ItemContainerContentsAccessor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -18,11 +20,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import org.jetbrains.annotations.NotNull;
 
-public class ShulkerGui {
-    ServerPlayer player;
-
-    public ShulkerGui(@NotNull ServerPlayer player) {
-        this.player = player;
+public class ShulkerBoxGui extends ServersideGui {
+    public ShulkerBoxGui(@NotNull ServerPlayer player) {
+        super(player);
     }
 
     public void show() {
@@ -40,6 +40,7 @@ public class ShulkerGui {
         }
 
         player.openMenu(new SimpleMenuProvider((i, player, container) -> new Menu(i, player, newContainer), stack.getHoverName()));
+        player.level().playSound(null, player, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 1f, 1f);
         ConvenientContainers.FROZEN_STACKS.add(stack);
 
         player.containerMenu.addSlotListener(new ContainerListener() {

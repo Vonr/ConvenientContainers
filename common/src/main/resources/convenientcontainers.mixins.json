@@ -7,12 +7,14 @@
   ],
   "mixins": [
     "AbstractContainerMenuMixin",
+    "AnvilMenuAccessor",
     "ItemContainerContentsAccessor",
     "ItemMixin",
     "PlayerListMixin",
     "ServerPlayerGameModeMixin",
     "ServerPlayerMixin",
-    "SlotMixin"
+    "SlotMixin",
+    "StonecutterMenuAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
