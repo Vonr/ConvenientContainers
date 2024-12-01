@@ -17,6 +17,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AnvilBlock;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -32,7 +34,6 @@ public class AnvilGui extends ServersideGui {
         assert !stack.isEmpty();
 
         player.openMenu(new SimpleMenuProvider(Menu::new, stack.getHoverName()));
-        ConvenientContainers.FROZEN_STACKS.add(stack);
         player.awardStat(Stats.INTERACT_WITH_ANVIL);
     }
 
@@ -94,9 +95,7 @@ public class AnvilGui extends ServersideGui {
                 }
 
                 if (anvil.getCount() == 1) {
-                    ConvenientContainers.FROZEN_STACKS.remove(player.getMainHandItem());
                     player.setItemInHand(InteractionHand.MAIN_HAND, newItem == Items.AIR ? ItemStack.EMPTY : new ItemStack(newItem, 1));
-                    ConvenientContainers.FROZEN_STACKS.add(player.getMainHandItem());
                 } else {
                     anvil.setCount(anvil.getCount() - 1);
                     if (newItem != Items.AIR) {
@@ -111,7 +110,7 @@ public class AnvilGui extends ServersideGui {
 
         @Override
         public boolean stillValid(Player player) {
-            return true;
+            return Block.byItem(player.getMainHandItem().getItem()) instanceof AnvilBlock;
         }
     }
 }

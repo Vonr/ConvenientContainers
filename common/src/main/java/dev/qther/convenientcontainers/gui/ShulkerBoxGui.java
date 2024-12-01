@@ -1,13 +1,11 @@
 package dev.qther.convenientcontainers.gui;
 
-import dev.qther.convenientcontainers.ConvenientContainers;
 import dev.qther.convenientcontainers.mixin.ItemContainerContentsAccessor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
@@ -18,6 +16,8 @@ import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.ShulkerBoxMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import org.jetbrains.annotations.NotNull;
 
 public class ShulkerBoxGui extends ServersideGui {
@@ -39,34 +39,38 @@ public class ShulkerBoxGui extends ServersideGui {
             newContainer.setItem(index, index >= items.size() ? ItemStack.EMPTY : items.get(index));
         }
 
-        player.openMenu(new SimpleMenuProvider((i, player, container) -> new Menu(i, player, newContainer), stack.getHoverName()));
+        player.openMenu(new SimpleMenuProvider((i, inv, container) -> new Menu(i, inv, newContainer, stack), stack.getHoverName()));
+
         player.level().playSound(null, player, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 1f, 1f);
-        ConvenientContainers.FROZEN_STACKS.add(stack);
-
-        player.containerMenu.addSlotListener(new ContainerListener() {
-            @Override
-            public void slotChanged(AbstractContainerMenu abstractContainerMenu, int i, ItemStack itemStack) {
-                var newContents = ItemContainerContents.fromItems(newContainer.getItems());
-                stack.set(DataComponents.CONTAINER, newContents);
-            }
-
-            @Override
-            public void dataChanged(AbstractContainerMenu abstractContainerMenu, int i, int j) {
-            }
-        });
 
         player.awardStat(Stats.OPEN_SHULKER_BOX);
         PiglinAi.angerNearbyPiglins(player, true);
     }
 
     public static class Menu extends ShulkerBoxMenu {
-        public Menu(int i, Inventory inventory, Container container) {
+        ItemStack stack;
+
+        public Menu(int i, Inventory inventory, SimpleContainer container, ItemStack stack) {
             super(i, inventory, container);
+            this.stack = stack;
+
+            this.addSlotListener(new ContainerListener() {
+                @Override
+                public void slotChanged(AbstractContainerMenu abstractContainerMenu, int i, ItemStack itemStack) {
+                    var newContents = ItemContainerContents.fromItems(container.getItems());
+                    stack.set(DataComponents.CONTAINER, newContents);
+                }
+
+                @Override
+                public void dataChanged(AbstractContainerMenu abstractContainerMenu, int i, int j) {
+                }
+            });
         }
 
         @Override
         public boolean stillValid(Player player) {
-            return true;
+            var handStack = player.getMainHandItem();
+            return Block.byItem(handStack.getItem()) instanceof ShulkerBoxBlock && ItemStack.isSameItemSameComponents(handStack, stack);
         }
     }
 }

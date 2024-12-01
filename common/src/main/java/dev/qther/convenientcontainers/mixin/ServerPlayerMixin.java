@@ -1,6 +1,5 @@
 package dev.qther.convenientcontainers.mixin;
 
-import dev.qther.convenientcontainers.ConvenientContainers;
 import dev.qther.convenientcontainers.gui.EnderChestGui;
 import dev.qther.convenientcontainers.gui.ShulkerBoxGui;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,10 +20,6 @@ public class ServerPlayerMixin {
             case EnderChestGui.Menu ignored -> player.level().playSound(null, player, SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1f, 1f);
             case ShulkerBoxGui.Menu ignored -> player.level().playSound(null, player, SoundEvents.SHULKER_BOX_CLOSE, SoundSource.BLOCKS, 1f, 1f);
             default -> {}
-        }
-
-        for (var item : player.getInventory().items) {
-            ConvenientContainers.FROZEN_STACKS.remove(item);
         }
     }
 }

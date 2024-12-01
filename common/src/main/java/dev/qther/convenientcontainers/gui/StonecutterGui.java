@@ -1,11 +1,9 @@
 package dev.qther.convenientcontainers.gui;
 
-import dev.qther.convenientcontainers.ConvenientContainers;
 import dev.qther.convenientcontainers.mixin.StonecutterMenuAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceArrayMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.SimpleMenuProvider;
@@ -20,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.StonecutterBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -35,8 +35,7 @@ public class StonecutterGui extends ServersideGui {
         var stack = player.getMainHandItem();
         assert !stack.isEmpty();
 
-        player.openMenu(new SimpleMenuProvider(Menu::new, Component.translatable("block.minecraft.stonecutter")));
-        ConvenientContainers.FROZEN_STACKS.add(stack);
+        player.openMenu(new SimpleMenuProvider(Menu::new, stack.getHoverName()));
         player.awardStat(Stats.INTERACT_WITH_STONECUTTER);
     }
 
@@ -98,9 +97,10 @@ public class StonecutterGui extends ServersideGui {
             return result;
         }
 
+
         @Override
         public boolean stillValid(Player player) {
-            return true;
+            return Block.byItem(player.getMainHandItem().getItem()) instanceof StonecutterBlock;
         }
     }
 }
