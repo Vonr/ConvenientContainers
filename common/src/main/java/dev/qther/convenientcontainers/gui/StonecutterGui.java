@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.StonecutterBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -44,7 +45,7 @@ public class StonecutterGui extends ServersideGui {
 
         public Menu(int i, Inventory inventory, Player player) {
             super(i, inventory, new ContainerLevelAccess() {
-                @Override
+                @Override @NotNull
                 public <T> Optional<T> evaluate(BiFunction<Level, BlockPos, T> biFunction) {
                     return Optional.ofNullable(biFunction.apply(player.level(), player.blockPosition()));
                 }
@@ -62,7 +63,7 @@ public class StonecutterGui extends ServersideGui {
                         if (map != null) {
                             var recipe = map.get(accessor.getInputSlot().getItem().getItem());
                             if (recipe != null) {
-                                var recipes = menu.getRecipes();
+                                var recipes = menu.getVisibleRecipes().entries().stream().map(it -> it.recipe().recipe().orElse(null)).filter(Objects::nonNull).toList();
                                 var idx = recipes.indexOf(recipe);
                                 if (idx != -1) {
                                     menu.clickMenuButton(player, idx);
@@ -91,7 +92,7 @@ public class StonecutterGui extends ServersideGui {
                         .get(player)
                         .put(
                                 ((StonecutterMenuAccessor) this).getInputSlot().getItem().getItem(),
-                                this.getRecipes().get(i));
+                                this.getVisibleRecipes().entries().stream().map(it -> it.recipe().recipe().orElse(null)).filter(Objects::nonNull).toList().get(i));
             }
 
             return result;

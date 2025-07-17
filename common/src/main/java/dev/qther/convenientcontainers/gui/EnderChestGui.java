@@ -31,7 +31,7 @@ public class EnderChestGui extends ServersideGui {
         player.openMenu(new SimpleMenuProvider((i, inventory, _player) -> new Menu(MenuType.GENERIC_9x3, i, inventory, container, 3), Component.translatable("block.minecraft.ender_chest")));
         player.level().playSound(null, player, SoundEvents.ENDER_CHEST_OPEN, SoundSource.BLOCKS, 1f, 1f);
         player.awardStat(Stats.OPEN_ENDERCHEST);
-        PiglinAi.angerNearbyPiglins(player, true);
+        PiglinAi.angerNearbyPiglins(player.serverLevel(), player, true);
     }
 
     public static class Menu extends ChestMenu {

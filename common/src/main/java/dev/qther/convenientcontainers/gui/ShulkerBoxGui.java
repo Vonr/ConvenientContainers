@@ -44,7 +44,7 @@ public class ShulkerBoxGui extends ServersideGui {
         player.level().playSound(null, player, SoundEvents.SHULKER_BOX_OPEN, SoundSource.BLOCKS, 1f, 1f);
 
         player.awardStat(Stats.OPEN_SHULKER_BOX);
-        PiglinAi.angerNearbyPiglins(player, true);
+        PiglinAi.angerNearbyPiglins(player.serverLevel(), player, true);
     }
 
     public static class Menu extends ShulkerBoxMenu {
