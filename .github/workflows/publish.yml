@@ -49,7 +49,7 @@ jobs:
       - name: Publish Fabric version
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          files-primary: fabric/build/libs/convenientcontainers-fabric-${{ env.VERSION }}.jar
+          files: fabric/build/libs/convenientcontainers-fabric-${{ env.VERSION }}.jar
           modrinth-id: VQ7R4Ou0
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1105604
@@ -62,7 +62,7 @@ jobs:
       - name: Publish NeoForge version
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          files-primary: neoforge/build/libs/convenientcontainers-neoforge-${{ env.VERSION }}.jar
+          files: neoforge/build/libs/convenientcontainers-neoforge-${{ env.VERSION }}.jar
           modrinth-id: VQ7R4Ou0
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1105604
