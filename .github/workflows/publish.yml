@@ -46,13 +46,28 @@ jobs:
         run: |
           printf "Auto-generated Changelog:\n%s" "$(git log "$(git describe --tags --abbrev=0 HEAD~1)..HEAD~1" --oneline | awk '! / (ci|ver|internal|README)!?([:,. ]|$)/ { $1="-"; print $0 }')" > .ci-changelog.md
           cat .ci-changelog.md
-      - uses: Kir-Antipov/mc-publish@v3.3
+      - name: Publish Fabric version
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
+          files-primary: fabric/build/libs/convenientcontainers-fabric-${{ env.VERSION }}.jar
           modrinth-id: VQ7R4Ou0
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1105604
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          name: Convenient Containers ${{ env.VERSION }} for ${{ env.MC_MAX_VER }}
+          name: Convenient Containers ${{ env.VERSION }} for Fabric ${{ env.MC_MAX_VER }}
+          version: ${{ env.VERSION }}
+          game-versions: |
+            >=${{ env.MC_MIN_VER }} <=${{ env.MC_MAX_VER }}
+          changelog-file: .ci-changelog.md
+      - name: Publish NeoForge version
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          files-primary: neoforge/build/libs/convenientcontainers-neoforge-${{ env.VERSION }}.jar
+          modrinth-id: VQ7R4Ou0
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1105604
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          name: Convenient Containers ${{ env.VERSION }} for NeoForge ${{ env.MC_MAX_VER }}
           version: ${{ env.VERSION }}
           game-versions: |
             >=${{ env.MC_MIN_VER }} <=${{ env.MC_MAX_VER }}
