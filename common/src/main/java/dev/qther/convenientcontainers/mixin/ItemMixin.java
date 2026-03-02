@@ -1,7 +1,10 @@
 package dev.qther.convenientcontainers.mixin;
 
+import dev.qther.convenientcontainers.gui.ShulkerBoxGui;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -19,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ItemMixin {
     @Inject(method = "overrideStackedOnOther", at = @At("HEAD"), cancellable = true)
     private void overrideStackedOnOther(ItemStack itemStack, Slot slot, ClickAction clickAction, Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (Block.byItem((Item) (Object) this) instanceof ShulkerBoxBlock) {
+        if (((Item) (Object) this).builtInRegistryHolder().is(ItemTags.SHULKER_BOXES)) {
             if (clickAction != ClickAction.SECONDARY) {
                 return;
             }
@@ -68,6 +71,36 @@ public class ItemMixin {
                 slot.set(removed);
             }
             itemStack.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(newContainer.getItems()));
+
+            cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "overrideOtherStackedOnMe", at = @At("HEAD"), cancellable = true)
+    private void overrideOtherStackedOnMe(ItemStack me, ItemStack other, Slot slot, ClickAction clickAction, Player player, SlotAccess slotAccess, CallbackInfoReturnable<Boolean> cir) {
+        if (((Item) (Object) this).builtInRegistryHolder().is(ItemTags.SHULKER_BOXES) && !other.isEmpty()) {
+            if (player.containerMenu instanceof ShulkerBoxGui.Menu) {
+                cir.setReturnValue(true);
+                return;
+            }
+
+            if (clickAction != ClickAction.SECONDARY) {
+                return;
+            }
+
+            var container = me.get(DataComponents.CONTAINER);
+            assert container != null;
+
+            var contents = ((ItemContainerContentsAccessor) (Object) container).getItems();
+
+            var newContainer = new SimpleContainer(27);
+            for (int i = 0; i < contents.size(); i++) {
+                newContainer.setItem(i, contents.get(i));
+            }
+
+            other.setCount(newContainer.addItem(other.copy()).getCount());
+
+            me.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(newContainer.getItems()));
 
             cir.setReturnValue(true);
         }
