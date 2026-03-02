@@ -7,8 +7,8 @@ on:
       "*"
 
 env:
-  MC_MIN_VER: '1.21.5'
-  MC_MAX_VER: '1.21.5'
+  MC_MIN_VER: '1.21.11'
+  MC_MAX_VER: '1.21.11'
   JAVA_VERSION: 21
 
 permissions:
